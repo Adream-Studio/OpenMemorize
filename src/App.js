@@ -1,25 +1,43 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {
+  PureComponent
+} from 'react';
+import {
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  Button,
+} from 'reactstrap';
 import './App.css';
 
-class App extends Component {
+class App extends PureComponent {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className="container">
+          <Card>
+            <CardBody>
+              <CardTitle>
+                <h2>公園</h2>
+              </CardTitle>
+              <CardSubtitle>こうえん</CardSubtitle>
+              <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
+            </CardBody>
+            <CardImg
+              width="100%"
+              src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180"
+              alt="Card image cap"
+            />
+          </Card>
+          <Button
+            block
+            className="btn"
           >
-            Learn React
-          </a>
-        </header>
+            下一个
+          </Button>
+        </div>
       </div>
     );
   }
