@@ -23,11 +23,16 @@ class App extends PureComponent {
                 <h2>公園</h2>
               </CardTitle>
               <CardSubtitle>こうえん</CardSubtitle>
-              <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
+              <CardText>
+                〔「公苑」と書く施設もある〕 主に市街地またはその周辺に設けられ、市民が休息したり散歩したりできる公共の庭園。
+              </CardText>
+              <CardText>
+                〔「公苑」と書く施設もある〕 主に市街地またはその周辺に設けられ、市民が休息したり散歩したりできる公共の庭園。
+              </CardText>
             </CardBody>
             <CardImg
-              width="100%"
-              src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180"
+              className="cardImg"
+              src="https://weblio.hs.llnwd.net/e7/img/dict/hyazi/76thumb.png"
               alt="Card image cap"
             />
           </Card>

@@ -6,3 +6,7 @@
 .btn {
 	margin-top: 10px;
 }
+
+.cardImg {
+	width: fit-content;
+}
