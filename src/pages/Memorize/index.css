@@ -1,0 +1,15 @@
+.btn {
+	margin: 10px 0;
+}
+
+.img {
+	width: fit-content;
+	max-width: 100%;
+	margin-top: 10px;
+}
+
+.jumbotron {
+	padding: 1rem;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
