@@ -4,7 +4,7 @@ import Add from './pages/Add';
 
 export default class App extends PureComponent {
   state = {
-    page: 'add',
+    page: 'memorize',
   };
 
   handleAdd = () => {
