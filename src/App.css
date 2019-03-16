@@ -1,0 +1,36 @@
+.wrapper {
+  width: 100%;
+  position: absolute;
+  margin-bottom: 20%;
+  padding-top: 15px;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+} 
+
+.affix {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background: #fff;
+}
+
+.ant-menu-horizontal > .ant-menu-item:hover, .ant-menu-horizontal > .ant-menu-submenu:hover, .ant-menu-horizontal > .ant-menu-item-active, .ant-menu-horizontal > .ant-menu-submenu-active, .ant-menu-horizontal > .ant-menu-item-open, .ant-menu-horizontal > .ant-menu-submenu-open, .ant-menu-horizontal > .ant-menu-item-selected, .ant-menu-horizontal > .ant-menu-submenu-selected {
+  border-top: 2px solid #1890ff;
+  border-bottom: none;
+}
+
+.ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
+  border-bottom: none;
+}

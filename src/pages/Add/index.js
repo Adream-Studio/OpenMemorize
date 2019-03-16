@@ -7,6 +7,7 @@ import {
   Input,
   Upload,
   Icon,
+  Modal,
 } from 'antd';
 import { query, add } from '../../models/word';
 import './index.css';
@@ -42,7 +43,7 @@ class Add extends PureComponent {
       this.setState({ words });
     });
   }
-
+  
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -86,7 +87,7 @@ class Add extends PureComponent {
     });
   };
 
-  handleChange = (info) => {
+  handleImgChange = (info) => {
     if (info.fileList[info.fileList.length - 1].originFileObj) {
       getBase64(info.fileList[info.fileList.length - 1].originFileObj, img => {
         this.setState({
@@ -125,9 +126,29 @@ class Add extends PureComponent {
     }
   };
 
+  clearForm = () => {
+    const { form } = this.props;
+    form.resetFields();
+
+    this.setState({ img: '' });
+  };
+
+  handleCancel = () => {
+    const that = this;
+
+    Modal.confirm({
+      title: '将会清空本次添加，是否继续？',
+      onOk() {
+        that.clearForm();
+      },
+      okText: '是',
+      cancelText: '否',
+    });
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { onMemorize, form } = this.props;
+    const { form } = this.props;
     const { img } = this.state;
 
     form.getFieldDecorator('interpreKeys', { initialValue: [0] });
@@ -176,15 +197,14 @@ class Add extends PureComponent {
       <Col
         xs={{ span:22, offset:1 }}
         md={{ span:12, offset:6 }}
+        className={ this.props.className }
       >
         <Card
-          className="card"
-          title="添加单词"
           bordered
         >
           <Form
             {...formItemLayout}
-            onSubmit={this.handleSubmit}
+            onSubmit={ this.handleSubmit }
           >
             <Item>{getFieldDecorator('text', {
                 rules: [{
@@ -220,7 +240,7 @@ class Add extends PureComponent {
               listType="picture-card"
               className="avatar-uploader"
               showUploadList={ false }
-              onChange={ this.handleChange }
+              onChange={ this.handleImgChange }
               beforeUpload={ () => false }
             >
               {img ? <img width="100%" src={ img } alt="avatar" /> : uploadButton}
@@ -240,7 +260,7 @@ class Add extends PureComponent {
             size="large"
             className="btn"
             block
-            onClick={ onMemorize }
+            onClick={ this.handleCancel }
           >
             取消
           </Button>

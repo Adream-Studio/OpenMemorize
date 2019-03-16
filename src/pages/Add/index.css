@@ -1,7 +1,7 @@
-.card {
-  margin: 10px 0;
-}
-
 .btn {
   margin: 5px 0;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+  width: 100%;
 }

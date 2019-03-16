@@ -48,22 +48,14 @@ class Memorize extends PureComponent {
   };
 
   render() {
-    const { onAdd } = this.props;
     const { index, words } = this.state;
 
     return (
       <Col
         xs={{ span:22, offset:1 }}
         md={{ span: 12, offset: 6 }}
+        className={ this.props.className }
       >
-        <Button
-          size="large"
-          block
-          className="btn"
-          onClick={onAdd}
-        >
-          <Icon type="plus-circle" theme="filled" />
-        </Button>
         { words.length > 0 ? (
           <Fragment>
             <Card
@@ -101,7 +93,7 @@ class Memorize extends PureComponent {
             </Button>
           </Fragment>
         ) : (
-          <Card style={{ textAlign: 'center' }}>还没有数据呢</Card>
+          <Card style={{ textAlign: 'center' }}>还没有单词呢，去添加一个？</Card>
         ) } 
       </Col>
     );
