@@ -5,13 +5,9 @@
   padding-top: 15px;
 }
 
-.show {
-  display: block;
+.btn {
+  margin: 10px 0;
 }
-
-.hide {
-  display: none;
-} 
 
 .affix {
   width: 100%;

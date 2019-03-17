@@ -54,7 +54,6 @@ class Memorize extends PureComponent {
       <Col
         xs={{ span:22, offset:1 }}
         md={{ span: 12, offset: 6 }}
-        className={ this.props.className }
       >
         { words.length > 0 ? (
           <Fragment>

@@ -81,6 +81,7 @@ class Add extends PureComponent {
           words,
           onSuccess: () => {
             onMemorize();
+            // @TODO: 有问题
           },
         })
       }
@@ -197,7 +198,6 @@ class Add extends PureComponent {
       <Col
         xs={{ span:22, offset:1 }}
         md={{ span:12, offset:6 }}
-        className={ this.props.className }
       >
         <Card
           bordered

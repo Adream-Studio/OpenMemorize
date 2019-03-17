@@ -11,6 +11,7 @@ import {
 import { createBrowserHistory } from "history";
 import Memorize from './pages/Memorize';
 import Add from './pages/Add';
+import Dict from './pages/Dict';
 import './App.css';
 
 const { Item } = Menu;
@@ -26,6 +27,7 @@ export default class App extends PureComponent {
     const { pathname } = history.location;
 
     this.setState({ page: pathname.slice(1) });
+    // 让page随url变化
   }
 
   handleMenuClick = (e) => {
@@ -77,6 +79,7 @@ export default class App extends PureComponent {
         <Route path="/" exact component={ Memorize } />
         <Route path="/add" component={ Add } />
         <Route path="/memorize" component={ Memorize } />
+        <Route path="/dict" component={ Dict } />
       </div>
       </Router>
     );
