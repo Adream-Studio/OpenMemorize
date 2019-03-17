@@ -22,6 +22,12 @@ export default class App extends PureComponent {
     page: 'memorize',
   };
 
+  componentDidMount() {
+    const { pathname } = history.location;
+
+    this.setState({ page: pathname.slice(1) });
+  }
+
   handleMenuClick = (e) => {
     history.push(e.key);
 
@@ -70,6 +76,7 @@ export default class App extends PureComponent {
 
         <Route path="/" exact component={ Memorize } />
         <Route path="/add" component={ Add } />
+        <Route path="/memorize" component={ Memorize } />
       </div>
       </Router>
     );
