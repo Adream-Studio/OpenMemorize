@@ -4,11 +4,18 @@ import {
   Menu,
   Icon,
 } from 'antd';
+import {
+  Router,
+  Route,
+} from 'react-router-dom';
+import { createBrowserHistory } from "history";
 import Memorize from './pages/Memorize';
 import Add from './pages/Add';
 import './App.css';
 
 const { Item } = Menu;
+
+const history = createBrowserHistory();
 
 export default class App extends PureComponent {
   state = {
@@ -16,6 +23,8 @@ export default class App extends PureComponent {
   };
 
   handleMenuClick = (e) => {
+    history.push(e.key);
+
     this.setState({ page: e.key });
   };
 
@@ -23,15 +32,10 @@ export default class App extends PureComponent {
     const { page } = this.state;
 
     return (
+      <Router history={ history }>
       <div
         className="wrapper"
       >
-        <Add
-          className={ page==='add' ? 'show' : 'hide' }
-        />
-        <Memorize
-          className={ page==='memorize' ? 'show': 'hide' }
-        />
         <Affix
           className="affix"
         >
@@ -63,7 +67,11 @@ export default class App extends PureComponent {
             </Item>
           </Menu>
         </Affix>
+
+        <Route path="/" exact component={ Memorize } />
+        <Route path="/add" component={ Add } />
       </div>
+      </Router>
     );
   }
 }
