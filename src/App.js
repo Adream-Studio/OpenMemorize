@@ -56,62 +56,62 @@ export default class App extends PureComponent {
 
     return (
       <Router history={ history }>
-      <div
-        className="wrapper"
-      >
-        <Affix
-          className="affix"
+        <div
+          className="wrapper"
         >
-          <Menu
-            className="menu"
-            onClick={this.handleMenuClick}
-            selectedKeys={[page]}
-            mode="horizontal"
+          <Affix
+            className="affix"
           >
-            <Item
-              key="add"
+            <Menu
+              className="menu"
+              onClick={this.handleMenuClick}
+              selectedKeys={[page]}
+              mode="horizontal"
             >
-              <Icon type="plus-square" />加词
-            </Item>
-            <Item
-              key="memorize"
-            >
-              <Icon type="thunderbolt" />背词
-            </Item>
-            <Item
-              key="dict"
-            >
-              <Icon type="book" />辞书
-            </Item>
-            <Item
-              key="setting"
-            >
-              <Icon type="setting" />设置
-            </Item>
-          </Menu>
-        </Affix>
+              <Item
+                key="add"
+              >
+                <Icon type="plus-square" />加词
+              </Item>
+              <Item
+                key="memorize"
+              >
+                <Icon type="thunderbolt" />背词
+              </Item>
+              <Item
+                key="dict"
+              >
+                <Icon type="book" />辞书
+              </Item>
+              <Item
+                key="setting"
+              >
+                <Icon type="setting" />设置
+              </Item>
+            </Menu>
+          </Affix>
 
-        <Route path="/" exact render={props => (
-          <Redirect
-            to={{
-              pathname: '/memorize',
-              state: { from: props.location },
-            }}
-          />
-        )} />
-        <Route
-          path="/add"
-          render={ props => (
-            <Add
-              onCache={ this.handleCache}
-              onRetrieve={ this.handleRetrieve }
-              { ...props }
+          <Route path="/" exact render={props => (
+            <Redirect
+              to={{
+                pathname: '/memorize',
+                state: { from: props.location },
+              }}
             />
-          )}
-        />
-        <Route path="/memorize" component={ Memorize } />
-        <Route path="/dict" component={ Dict } />
-      </div>
+          )} />
+          <Route
+            path="/add"
+            render={ props => (
+              <Add
+                onCache={ this.handleCache}
+                onRetrieve={ this.handleRetrieve }
+                { ...props }
+              />
+            )}
+          />
+          <Route path="/memorize" component={ Memorize } />
+          <Route path="/dict" component={ Dict } />
+        </div>
       </Router>
     );
   }

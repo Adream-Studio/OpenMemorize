@@ -1,7 +1,7 @@
-import { fetchWord, addWord, } from '../services/api';
+import { fetchWord, updateWord, } from '../services/api';
 
-export function query(callback) {
-    fetchWord().then(data => {
+export function query(dictId, callback) {
+    fetchWord(dictId).then(data => {
         if (data === null) {
             data = [];
         }
@@ -12,13 +12,8 @@ export function query(callback) {
     })
 }
 
-export function add(params) {
-    const {
-        words,
-        onSuccess,
-    } = params;
-
-    addWord(words).then(data => {
+export function add({ dictId, words, onSuccess }) {
+    updateWord(dictId, words).then(() => {
         onSuccess();
     }).catch(err => {
         console.log(err);

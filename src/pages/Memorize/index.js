@@ -8,8 +8,11 @@ import {
   List,
   Button,
   Icon,
+  Empty,
+  Badge,
 } from 'antd';
 import { query } from '../../models/word';
+import { getCurrent } from '../../models/dict';
 import './index.css';
 
 const { Item } = List;
@@ -18,11 +21,18 @@ class Memorize extends PureComponent {
   state = {
     index: 0,
     words: [],
+    current: null,
   };
 
   componentWillMount() {
-    query(words => {
-      this.setState({ words });
+    getCurrent(current => {
+      if (current !== null) {
+        query(current.id, words => {
+          this.setState({ words });
+        });
+      }
+
+      this.setState({ current });
     });
   }
 
@@ -48,13 +58,20 @@ class Memorize extends PureComponent {
   };
 
   render() {
-    const { index, words } = this.state;
+    const { index, words, current } = this.state;
 
     return (
       <Col
         xs={{ span:22, offset:1 }}
         md={{ span: 12, offset: 6 }}
       >
+        { current!==null && current.name && (
+          <Badge
+            status="processing"
+            text={ current.name }
+            className="current"
+          />
+        ) }
         { words.length > 0 ? (
           <Fragment>
             <Card
@@ -73,7 +90,7 @@ class Memorize extends PureComponent {
                   </Item>
                 )}
               />
-              { words[index].media.type === 'img' && (
+              { (words[index].media.type==='img' && words[index].media.content) && (
                 <img
                   className="img"
                   src={ words[index].media.content }
@@ -92,7 +109,9 @@ class Memorize extends PureComponent {
             </Button>
           </Fragment>
         ) : (
-          <Card style={{ textAlign: 'center' }}>还没有单词呢，去添加一个？</Card>
+          <Empty
+            description="还没有单词呢，去添加一个？"
+          />
         ) } 
       </Col>
     );

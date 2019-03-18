@@ -9,12 +9,15 @@ import {
   Icon,
   Modal,
   message,
+  Select,
 } from 'antd';
-import { query, add } from '../../models/word';
+import { query as queryDicts } from '../../models/dict';
+import { query as queryWords, add } from '../../models/word';
 import './index.css';
 
 const { Item } = Form;
 const { TextArea } = Input;
+const { Option } = Select;
 
 const formItemLayout = {
   labelCol: {
@@ -40,13 +43,13 @@ class Add extends PureComponent {
 
     this.state = {
       img: onRetrieve().img,  
-      words: [],
+      dicts: [],
     };
   }
 
   componentWillMount() {
-    query(words => {
-      this.setState({ words });
+    queryDicts(dicts => {
+      this.setState({ dicts });
     });
   }
 
@@ -140,8 +143,9 @@ class Add extends PureComponent {
           kana,
           interpreKeys,
           interpre,
+          dict,
         } = values;
-        const { img, words } = this.state;
+        const { img } = this.state;
 
         const interpreArr = [];
         for (let i = 0; i < interpreKeys.length; i+=1) {
@@ -161,15 +165,18 @@ class Add extends PureComponent {
           },
         };
         
-        words.push(word);
+        queryWords(dict, words => {
+          words.push(word);
 
-        add({
-          words,
-          onSuccess: () => {
-            message.success("添加成功！");
-            that.clearForm();
-          },
-        })
+          add({
+            dictId: dict,
+            words,
+            onSuccess: () => {
+              message.success("添加成功！");
+              that.clearForm();
+            },
+          });
+        });
       }
     });
   };
@@ -248,7 +255,7 @@ class Add extends PureComponent {
   render() {
     const { onRetrieve } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { img } = this.state;
+    const { img, dicts } = this.state;
 
     const uploadButton = (
       <div>
@@ -272,6 +279,25 @@ class Add extends PureComponent {
             onSubmit={ this.handleSubmit }
             onChange={ () => this.cache() }
           >
+            <Item>
+              {getFieldDecorator('dict', {
+                rules: [{
+                  required: true,
+                  message: '请选择辞书，若没有请先去创建',
+                }],
+              })(
+                <Select size="large" placeholder="选择辞书">
+                  { dicts.map(item => (
+                    <Option
+                      key={ item.id }
+                      value={ item.id }
+                    >
+                      { item.name }
+                    </Option>
+                  )) }
+                </Select>
+              )}
+            </Item>
             <Item>{getFieldDecorator('text', {
                 rules: [{
                   required: true,
