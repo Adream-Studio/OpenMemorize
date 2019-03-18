@@ -29,6 +29,8 @@ class Memorize extends PureComponent {
       if (current !== null) {
         query(current.id, words => {
           this.setState({ words });
+
+          this.genNextIndex(words.length);
         });
       }
 
@@ -36,19 +38,14 @@ class Memorize extends PureComponent {
     });
   }
 
-  componentDidMount() {
-    this.genNextIndex();
-  }
+  genNextIndex = (length=null) => {
+    if (length === null) {
+      const { words } = this.state;
 
-  genRandom = (length) => {
-    return parseInt(Math.random()*length, 10);
-  };
+      length = words.length;
+    }
 
-  genNextIndex = () => {
-    const { words } = this.state;
-    const { length } = words;
-
-    const randomIndex = this.genRandom(length);
+    const randomIndex = parseInt(Math.random()*length, 10);
 
     this.setState({ index: randomIndex });
   };
