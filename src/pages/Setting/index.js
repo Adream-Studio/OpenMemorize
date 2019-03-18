@@ -48,7 +48,7 @@ class Setting extends PureComponent {
                 <Paragraph>
                   基于
                   <a
-                    href="https://gitee.com/AdreamStudio/OpenMemorize/LICENSE"
+                    href="https://gitee.com/AdreamStudio/OpenMemorize/raw/master/LICENSE"
                     target="_blank"
                   >
                     GPLv3许可证
