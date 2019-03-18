@@ -13,6 +13,8 @@ import { createBrowserHistory } from "history";
 import Memorize from './pages/Memorize';
 import Add from './pages/Add';
 import Dict from './pages/Dict';
+import Setting from './pages/Setting';
+import Donate from './pages/Donate';
 import './App.css';
 
 const { Item } = Menu;
@@ -111,6 +113,8 @@ export default class App extends PureComponent {
           />
           <Route path="/memorize" component={ Memorize } />
           <Route path="/dict" component={ Dict } />
+          <Route path="/setting" component={ Setting } />
+          <Route path="/donate" component={Donate } />
         </div>
       </Router>
     );

@@ -1,6 +1,8 @@
 # Open Memorize
 一款开源的背单词小应用，基于 [React](https://reactjs.org) 和 [Ant Design](https://ant.design) 开发
 
+![](src/logo.png)
+
 ### 项目说明
 
 主要有三个功能模块：添加单词、背单词和辞书管理。
