@@ -7,6 +7,7 @@ import {
 import {
   Router,
   Route,
+  Redirect,
 } from 'react-router-dom';
 import { createBrowserHistory } from "history";
 import Memorize from './pages/Memorize';
@@ -21,6 +22,10 @@ const history = createBrowserHistory();
 export default class App extends PureComponent {
   state = {
     page: 'memorize',
+    cache: {
+      formData: null,
+      img: null,
+    },
   };
 
   componentDidMount() {
@@ -34,6 +39,16 @@ export default class App extends PureComponent {
     history.push(e.key);
 
     this.setState({ page: e.key });
+  };
+
+  handleCache = (cache) => {
+    this.setState({ cache });
+  };
+
+  handleRetrieve = () => {
+    const { cache } = this.state;
+
+    return cache;
   };
 
   render() {
@@ -76,8 +91,24 @@ export default class App extends PureComponent {
           </Menu>
         </Affix>
 
-        <Route path="/" exact component={ Memorize } />
-        <Route path="/add" component={ Add } />
+        <Route path="/" exact render={props => (
+          <Redirect
+            to={{
+              pathname: '/memorize',
+              state: { from: props.location },
+            }}
+          />
+        )} />
+        <Route
+          path="/add"
+          render={ props => (
+            <Add
+              onCache={ this.handleCache}
+              onRetrieve={ this.handleRetrieve }
+              { ...props }
+            />
+          )}
+        />
         <Route path="/memorize" component={ Memorize } />
         <Route path="/dict" component={ Dict } />
       </div>

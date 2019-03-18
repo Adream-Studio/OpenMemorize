@@ -19,7 +19,6 @@ export function add(params) {
     } = params;
 
     addWord(words).then(data => {
-        console.log(data);
         onSuccess();
     }).catch(err => {
         console.log(err);
