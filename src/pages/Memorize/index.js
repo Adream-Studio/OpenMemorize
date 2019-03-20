@@ -65,12 +65,21 @@ class Memorize extends PureComponent {
         { current!==null && current.name && (
           <Badge
             status="processing"
-            text={ current.name }
+            text={ `${current.name} (${words.length})` }
             className="current"
           />
         ) }
         { words.length > 0 ? (
           <Fragment>
+            <Button
+              size="large"
+              block
+              type="primary"
+              className="btn"
+              onClick={this.handleClick}
+            >
+              <Icon type="thunderbolt" theme="filled" />
+            </Button>
             <Card
               bordered
             >
@@ -95,15 +104,6 @@ class Memorize extends PureComponent {
                 />
               ) }
             </Card>
-            <Button
-              size="large"
-              block
-              type="primary"
-              className="btn"
-              onClick={this.handleClick}
-            >
-              <Icon type="thunderbolt" theme="filled" />
-            </Button>
           </Fragment>
         ) : (
           <Empty

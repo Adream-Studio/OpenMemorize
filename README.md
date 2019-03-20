@@ -22,7 +22,7 @@ An open source word-memorizing app based on [React](https://reactjs.org) and [An
 
 1. **Add words** Users can easily add a piece of word infomation, including the *word itself*, 仮名(for Japanese) or *IPA*(International Phonetic Alphabet), some *interpretations* and a *picture* into a *dictionary*. Then you can memorize it in the Memorize page.
 
-2. **Memorize words** Once a dictionary selected, words show up randomly by users clicking the button below it so that uers can memorize it gradually.
+2. **Memorize words** Once a dictionary selected, words show up randomly by users clicking the button above it so that uers can memorize it gradually.
 > Maybe direct word editting on Memorize page will be accomplished in the 2.0 version
 
 3. **Dictionary managment** In this part, users can create, remove, export dictionary(in json file), ~~and change dictionaries' name~~.

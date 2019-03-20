@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
+  Row,
   Col,
   Card,
   Button,
@@ -11,7 +12,7 @@ import {
   message,
   Select,
 } from 'antd';
-import { query as queryDicts } from '../../models/dict';
+import { query as queryDicts, getCurrent } from '../../models/dict';
 import { query as queryWords, add } from '../../models/word';
 import './index.css';
 
@@ -44,12 +45,17 @@ class Add extends PureComponent {
     this.state = {
       img: onRetrieve().img,  
       dicts: [],
+      current: null,
     };
   }
 
   componentWillMount() {
     queryDicts(dicts => {
       this.setState({ dicts });
+    });
+
+    getCurrent(current => {
+      this.setState({ current });
     });
   }
 
@@ -86,33 +92,44 @@ class Add extends PureComponent {
     this.interpreItems = interpres.map(item => (
       <Item
         key={ `item${item.key}` }
-      >{form.getFieldDecorator(`interpre[${item.key}]`, {
-          initialValue: item.value,
-          rules: [{
-            required: true,
-            message: '释义不能为空!',
-          }],
-        })(
-          <TextArea
-            key={`textArea-${item.key}`}
-            autosize={{
-              minRows: 2,
-              maxRows: 4,
-            }}
-            size="large"
-            placeholder="释义"
-          />
-        )}
-        { interpres.length>1 && (
-          <Button
-            onClick={() => this.handleRemoveListItem(item.key)}
+      >
+        <Row gutter={ 6 }>
+          <Col
+            span={ interpres.length>1 ? 20 : 24 }
           >
-            <Icon
-              type="minus-circle-o"
-              key={`removeBtn-${item.key}`}
-            />
-          </Button>
-        ) }
+            {form.getFieldDecorator(`interpre[${item.key}]`, {
+              initialValue: item.value,
+              rules: [{
+                required: true,
+                message: '释义不能为空!',
+              }],
+            })(
+              <TextArea
+                key={`textArea-${item.key}`}
+                autosize={{
+                  minRows: 2,
+                  maxRows: 4,
+                }}
+                size="large"
+                placeholder="释义"
+              />
+            )}
+            </Col>
+            <Col span={ 4 }>
+            { interpres.length>1 && (
+              <Button
+                type="primary"
+                ghost
+                onClick={() => this.handleRemoveListItem(item.key)}
+              >
+                <Icon
+                  type="minus-circle-o"
+                  key={`removeBtn-${item.key}`}
+                />
+              </Button>
+            ) }
+          </Col>
+        </Row>
       </Item>
     ));
   };
@@ -255,7 +272,7 @@ class Add extends PureComponent {
   render() {
     const { onRetrieve } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { img, dicts } = this.state;
+    const { img, dicts, current } = this.state;
 
     const uploadButton = (
       <div>
@@ -285,6 +302,7 @@ class Add extends PureComponent {
                   required: true,
                   message: '请选择辞书，若没有请先去创建',
                 }],
+                initialValue: current ? current.id : '',
               })(
                 <Select size="large" placeholder="选择辞书">
                   { dicts.map(item => (
@@ -315,7 +333,7 @@ class Add extends PureComponent {
             })(
                 <Input
                   size="large"
-                  placeholder="假名"
+                  placeholder="假名/音标"
                 />
               )}
             </Item>

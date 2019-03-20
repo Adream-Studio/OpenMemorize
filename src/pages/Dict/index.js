@@ -43,7 +43,17 @@ class Dict extends PureComponent {
 
   getDicts = () => {
     query(dicts => {
-      this.setState({ dicts });
+      dicts.forEach(dict => {
+        queryWords(dict.id, words => {
+          const { dicts } = this.state;
+
+          const tmp = dicts.map(item => item);
+          dict.length = words.length;
+          tmp.push(dict);
+
+          this.setState({ dicts: tmp });
+        });
+      });
     });
   };
 
@@ -179,7 +189,7 @@ class Dict extends PureComponent {
   render() {
     const { modalVisible, dicts, current } = this.state;
     const { getFieldDecorator } = this.props.form;
-
+    
     return (
       <Col
         xs={{ span:22, offset:1 }}
@@ -245,6 +255,7 @@ class Dict extends PureComponent {
                   className="dict"
                 >
                   { item.name }
+                  <span>{ item.length }</span>
                   { (current && item.id===current.id) && (
                     <span className="current">正在背</span>
                   ) }
