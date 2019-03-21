@@ -27,6 +27,14 @@ export function add({ dicts, onSuccess }) {
   });
 }
 
+export function rename({ dicts, onSuccess }) {
+  updateDict(dicts).then(() => {
+    onSuccess();
+  }).catch(err => {
+    console.log(err);
+  });
+}
+
 export function remove({ dicts, dictId, onSuccess }) {
   updateDict(dicts).then(() => {
     removeDict(dictId).then(() => {

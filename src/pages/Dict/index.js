@@ -18,6 +18,7 @@ import {
   getCurrent,
   setCurrent,
   remove,
+  rename,
   save,
 } from '../../models/dict';
 import {
@@ -82,6 +83,12 @@ class Dict extends PureComponent {
   };
 
   handleRename = (dict) => {
+    const { form } = this.props;
+
+    form.setFieldsValue({
+      name: dict.name,
+    });
+
     this.setState({
       modalVisible: true,
       modalType: 'rename',
@@ -142,7 +149,32 @@ class Dict extends PureComponent {
   };
 
   renameDict = (dict, dicts, current) => {
-    const temp = dicts;
+    // 传进来的dict是已经修改过的
+    const temp = dicts.map(item => {
+      if (item.id === dict.id) {
+        return dict;
+      } else {
+        return item;
+      }
+    });
+
+    rename({
+      dicts: temp,
+      onSuccess: () => {
+        message.success("辞书改名成功！");
+        this.setState({ modalVisible: false });
+        this.getDicts();
+
+        if (current.id === dict.id) {
+          setCurrent({
+            dict,
+            onSuccess: () => {
+              this.getCurrentDict();
+            },
+          });
+        }
+      },
+    });
   };
 
   handleModalOkClick  = (e) => {
@@ -154,7 +186,9 @@ class Dict extends PureComponent {
       current,
     } = this.state;
 
-    this.props.form.validateFields((err, { name }) => {
+    const { form } = this.props;
+
+    form.validateFields((err, { name }) => {
       if (!err) {
         switch (modalType) {
           case 'add': {
@@ -170,7 +204,8 @@ class Dict extends PureComponent {
           case 'rename': {
             const { editingDict } = this.state;
 
-            console.log(editingDict);
+            editingDict.name = name;
+            this.renameDict(editingDict, dicts, current);
           }
           break;
 
@@ -179,6 +214,7 @@ class Dict extends PureComponent {
         }
 
         this.setState({ modalType: null, editingDict: null });
+        form.resetFields();
       }
     });
   };
@@ -225,7 +261,8 @@ class Dict extends PureComponent {
 
   render() {
     const { modalVisible, dicts, current } = this.state;
-    const { getFieldDecorator } = this.props.form;
+    const { form } = this.props;
+    const { getFieldDecorator } = form;
 
     return (
       <Col
@@ -312,7 +349,11 @@ class Dict extends PureComponent {
           title="新建辞书"
           visible={ modalVisible }
           onOk={ this.handleModalOkClick }
-          onCancel={ () => this.setState({ modalVisible: false }) }
+          onCancel={ () => { 
+            this.setState({ modalVisible: false });
+            this.getDicts();
+            form.resetFields();
+          }}
           okText="确定"
           cancelText="取消"
         >

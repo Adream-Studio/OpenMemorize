@@ -14,7 +14,7 @@ An open source word-memorizing app based on [React](https://reactjs.org) and [An
 2. **背单词** 用户选定某个辞书后，辞书中的词条会随机出现，用户点击按钮对词条进行切换，以实现背单词。
 > 2.0版本或许会添加在背单词页面的，词条修改功能。
 
-3. **辞书管理** 此模块用户可以创建、删除、导出辞书（json文件），~~还可以为辞书修改名称~~。
+3. **辞书管理** 此模块用户可以创建、删除、导出辞书（json文件），还可以为辞书修改名称。
 
 ### Project Description
 
@@ -25,4 +25,4 @@ An open source word-memorizing app based on [React](https://reactjs.org) and [An
 2. **Memorize words** Once a dictionary selected, words show up randomly by users clicking the button above it so that uers can memorize it gradually.
 > Maybe direct word editting on Memorize page will be accomplished in the 2.0 version
 
-3. **Dictionary managment** In this part, users can create, remove, export dictionary(in json file), ~~and change dictionaries' name~~.
+3. **Dictionary managment** In this part, users can create, remove, export dictionary(in json file), and change dictionaries' name.

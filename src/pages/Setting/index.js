@@ -38,7 +38,7 @@ class Setting extends PureComponent {
               bordered={ false }
             >
               <Col span={ 18 }>
-                <Paragraph>Open Memorize - v1.1</Paragraph>
+                <Paragraph>Open Memorize - v1.2</Paragraph>
                 <a
                   href="https://gitee.com/joenahm/codeMemo/blob/master/resume.md"
                   target="_blank"
