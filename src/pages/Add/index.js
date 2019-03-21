@@ -4,7 +4,7 @@ import {
   Col,
   Card,
   Button,
-  Form, 
+  Form,
   Input,
   Upload,
   Icon,
@@ -43,7 +43,7 @@ class Add extends PureComponent {
     const { onRetrieve } = this.props;
 
     this.state = {
-      img: onRetrieve().img,  
+      img: onRetrieve().img,
       dicts: [],
       current: null,
     };
@@ -78,7 +78,7 @@ class Add extends PureComponent {
       const { interpreKeys, interpre } = formData;
       interpres = interpreKeys.map((key, index) => ({
         key,
-        value: interpre[key], 
+        value: interpre[key],
       }));
     } else {
       interpres = [{
@@ -115,7 +115,7 @@ class Add extends PureComponent {
               />
             )}
             </Col>
-            <Col span={ 4 }>
+            <Col span={ 4 } className="btnRightWrapper">
             { interpres.length>1 && (
               <Button
                 type="primary"
@@ -137,7 +137,7 @@ class Add extends PureComponent {
   cache = (imgData=null) => {
     const { img: stateImg } = this.state;
     const { form, onCache } = this.props;
-    
+
     const formData = form.getFieldsValue();
 
     const cache = {
@@ -147,7 +147,7 @@ class Add extends PureComponent {
 
     onCache(cache);
   };
-  
+
   handleSubmit = (e) => {
     const that = this;
 
@@ -181,7 +181,7 @@ class Add extends PureComponent {
             content: img,
           },
         };
-        
+
         queryWords(dict, words => {
           words.push(word);
 
@@ -282,7 +282,7 @@ class Add extends PureComponent {
     );
 
     this.prepareForm(onRetrieve().formData);
-    
+
     return (
       <Col
         xs={{ span:22, offset:1 }}

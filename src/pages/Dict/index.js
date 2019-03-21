@@ -34,6 +34,8 @@ class Dict extends PureComponent {
     dicts: [],
     current: null,
     modalVisible: false,
+    modalType: null,
+    editingDict: null,
   };
 
   componentWillMount() {
@@ -66,7 +68,7 @@ class Dict extends PureComponent {
   };
 
   handleAdd = () => {
-    this.setState({ modalVisible: true });
+    this.setState({ modalVisible: true, modalType: 'add' });
   };
 
   handleSetCurrent = (dict) => {
@@ -79,11 +81,19 @@ class Dict extends PureComponent {
     });
   };
 
+  handleRename = (dict) => {
+    this.setState({
+      modalVisible: true,
+      modalType: 'rename',
+      editingDict: dict,
+    });
+  };
+
   handleRemove = (dict) => {
     const that = this;
     const { dicts, current } = this.state;
     const newDicts = dicts.filter(item => item.id!==dict.id);
-    
+
     Modal.confirm({
       title: '将会删除此辞书内所有单词，请三思！',
       onOk() {
@@ -131,19 +141,44 @@ class Dict extends PureComponent {
     });
   };
 
-  handleSubmit = (e) => {
+  renameDict = (dict, dicts, current) => {
+    const temp = dicts;
+  };
+
+  handleModalOkClick  = (e) => {
     e.preventDefault();
+
+    const {
+      modalType,
+      dicts,
+      current,
+    } = this.state;
 
     this.props.form.validateFields((err, { name }) => {
       if (!err) {
-        const dict = {
-          id: `${new Date().getTime()}`,
-          name,
-        };
+        switch (modalType) {
+          case 'add': {
+            const dict = {
+              id: `${new Date().getTime()}`,
+              name,
+            };
 
-        const { dicts, current } = this.state;
-        
-        this.addDict(dict, dicts, current);
+            this.addDict(dict, dicts, current);
+          }
+          break;
+
+          case 'rename': {
+            const { editingDict } = this.state;
+
+            console.log(editingDict);
+          }
+          break;
+
+          default:
+            console.err("【/Dict/index.js】一定是代码出错了！要不不可能到这个switch分支里来！");
+        }
+
+        this.setState({ modalType: null, editingDict: null });
       }
     });
   };
@@ -168,7 +203,7 @@ class Dict extends PureComponent {
     reader.addEventListener('load', () => {
       try {
         const dictionary = JSON.parse(reader.result);
-        
+
         const { dict, words } = dictionary;
 
         if (dict!==null && words!==null) {
@@ -191,7 +226,7 @@ class Dict extends PureComponent {
   render() {
     const { modalVisible, dicts, current } = this.state;
     const { getFieldDecorator } = this.props.form;
-    
+
     return (
       <Col
         xs={{ span:22, offset:1 }}
@@ -227,16 +262,22 @@ class Dict extends PureComponent {
             <Col span={ 12 } key={ item.id }>
               <Popover
                 trigger="click"
-                overlayStyle={{ zIndex: '1' }}	
+                overlayStyle={{ zIndex: '1' }}
                 content={
                   <List>
                     <List.Item
                       onClick={ () => {
-                        this.setState({ popVisible: false });
                         this.handleSetCurrent(item);
                       }}
                     >
                       背它
+                    </List.Item>
+                    <List.Item
+                      onClick={ () => {
+                        this.handleRename(item);
+                      }}
+                    >
+                      重命名
                     </List.Item>
                     <List.Item
                       onClick={ () => this.handleSave(item) }
@@ -270,12 +311,12 @@ class Dict extends PureComponent {
         <Modal
           title="新建辞书"
           visible={ modalVisible }
-          onOk={ this.handleSubmit }
+          onOk={ this.handleModalOkClick }
           onCancel={ () => this.setState({ modalVisible: false }) }
           okText="确定"
           cancelText="取消"
         >
-          <Form onSubmit={ this.handleSubmit }>
+          <Form onSubmit={ this.handleModalOkClick }>
             <Item>{getFieldDecorator('name', {
                 rules: [{
                   required: true,

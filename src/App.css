@@ -9,6 +9,11 @@
   margin: 10px 0;
 }
 
+
+.btnRightWrapper {
+  text-align: right;
+}
+
 .affix {
   width: 100%;
   position: fixed;

@@ -3,6 +3,7 @@ import React, {
   Fragment,
 } from 'react';
 import {
+  Row,
   Col,
   Card,
   List,
@@ -10,8 +11,9 @@ import {
   Icon,
   Empty,
   Badge,
+  Modal,
 } from 'antd';
-import { query } from '../../models/word';
+import { query, remove } from '../../models/word';
 import { getCurrent } from '../../models/dict';
 import './index.css';
 
@@ -25,6 +27,10 @@ class Memorize extends PureComponent {
   };
 
   componentWillMount() {
+    this.getWords();
+  }
+
+  getWords = () => {
     getCurrent(current => {
       if (current !== null) {
         query(current.id, words => {
@@ -36,7 +42,7 @@ class Memorize extends PureComponent {
 
       this.setState({ current });
     });
-  }
+  };
 
   genNextIndex = (length=null) => {
     if (length === null) {
@@ -50,8 +56,30 @@ class Memorize extends PureComponent {
     this.setState({ index: randomIndex });
   };
 
-  handleClick = () => {
+  handleNext = () => {
     this.genNextIndex();
+  };
+
+  handleRemove = (text) => {
+    const that = this;
+    const { words, current } = this.state;
+
+    Modal.confirm({
+      title: '真的要删除这个单词吗？',
+      onOk() {
+        const tmp = words.filter(item => item.text!==text);
+
+        remove({
+          dictId: current.id,
+          words: tmp,
+          onSuccess: () => {
+            that.getWords();
+          },
+        })
+      },
+      okText: '是的',
+      cancelText: '点错了',
+    });
   };
 
   render() {
@@ -76,15 +104,28 @@ class Memorize extends PureComponent {
               block
               type="primary"
               className="btn"
-              onClick={this.handleClick}
+              htmlType="button"
+              onClick={ this.handleNext }
             >
               <Icon type="thunderbolt" theme="filled" />
             </Button>
             <Card
               bordered
             >
-              <h2>{ words[index].text }</h2>
-              <h3>{ words[index].kana }</h3>
+              <Row>
+                <Col span={ 20 }>
+                  <h2>{ words[index].text }</h2>
+                  <h3>{ words[index].kana }</h3>
+                </Col>
+                <Col span={ 4 } className="btnRightWrapper">
+                  <Button
+                    htmlType="button"
+                    onClick={ () => this.handleRemove(words[index].text) }
+                  >
+                    <Icon type="delete" />
+                  </Button>
+                </Col>
+              </Row>
               <List
                 bordered
                 dataSource={ words[index].interpres }
@@ -109,7 +150,7 @@ class Memorize extends PureComponent {
           <Empty
             description="还没有单词呢，去添加一个？"
           />
-        ) } 
+        ) }
       </Col>
     );
   }
