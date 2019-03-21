@@ -42,6 +42,8 @@ class Dict extends PureComponent {
   };
 
   getDicts = () => {
+    this.setState({ dicts: [] });
+    // 防止过期数据累积
     query(dicts => {
       dicts.forEach(dict => {
         queryWords(dict.id, words => {
