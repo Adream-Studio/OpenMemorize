@@ -6,7 +6,6 @@ import {
   Button,
   Form,
   Input,
-  Upload,
   Icon,
   Modal,
   message,
@@ -14,6 +13,8 @@ import {
 } from 'antd';
 import { query as queryDicts, getCurrent } from '../../models/dict';
 import { query as queryWords, add } from '../../models/word';
+import ImgUploader from '../../components/ImgUploader';
+import { getBase64 } from '../../utils/utils';
 import './index.css';
 
 const { Item } = Form;
@@ -30,12 +31,6 @@ const formItemLayout = {
     sm: { span: 24 },
   },
 };
-
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
 
 class Add extends PureComponent {
   constructor(props) {
@@ -198,15 +193,40 @@ class Add extends PureComponent {
     });
   };
 
-  handleImgChange = (info) => {
-    if (info.fileList[info.fileList.length - 1].originFileObj) {
-      getBase64(info.fileList[info.fileList.length - 1].originFileObj, img => {
-        this.setState({
-          img,
-        });
+  processImg = (img) => {
+    this.setState({
+      img,
+    });
 
-        this.cache(img);
-      });
+    this.cache(img);
+  };
+
+  handleImgChange = (info) => {
+    const file = info.fileList[info.fileList.length - 1].originFileObj;
+    if (file) {
+      getBase64(file, this.processImg);
+    }
+  };
+
+  handleImgPaste = (e) => {
+    if (e.clipboardData && e.clipboardData.items) {
+      const { items } = e.clipboardData;
+
+      let status = true;
+      for (let i = 0;
+        status && (i < items.length);
+        i+=1) {
+
+        const item = items[i];
+
+        if (item.kind === "file") {
+            const file = item.getAsFile();
+
+            getBase64(file, this.processImg);
+
+            status = false;
+        }
+      }
     }
   };
 
@@ -274,13 +294,6 @@ class Add extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     const { img, dicts, current } = this.state;
 
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">添加图片</div>
-      </div>
-    );
-
     this.prepareForm(onRetrieve().formData);
 
     return (
@@ -347,16 +360,11 @@ class Add extends PureComponent {
               </Button>
             </Item>
             <Item>
-            <Upload
-              name="avatar"
-              listType="picture-card"
-              className="avatar-uploader"
-              showUploadList={ false }
-              onChange={ this.handleImgChange }
-              beforeUpload={ () => false }
-            >
-              {img ? <img width="100%" src={ img } alt="avatar" /> : uploadButton}
-            </Upload>
+              <ImgUploader
+                img={ img }
+                onImgChange={ this.handleImgChange }
+                onImgPaste={ this.handleImgPaste }
+              />
             </Item>
           </Form>
           <Button

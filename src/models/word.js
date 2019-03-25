@@ -20,6 +20,14 @@ export function add({ dictId, words, onSuccess }) {
   });
 }
 
+export function update({ dictId, words, onSuccess }) {
+  updateWord(dictId, words).then(() => {
+    onSuccess();
+  }).catch(err => {
+    console.log(err);
+  });
+}
+
 export function remove({ dictId, words, onSuccess }) {
   updateWord(dictId, words).then(() => {
     onSuccess();
