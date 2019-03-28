@@ -79,7 +79,7 @@ class Dict extends PureComponent {
     setCurrent({
       dict,
       onSuccess: () => {
-        message.success("设置在背辞书成功！");
+        message.success(this.dictPage.setCurrentSuccessInfo);
         this.getCurrentDict();
       },
     });
@@ -105,7 +105,7 @@ class Dict extends PureComponent {
     const newDicts = dicts.filter(item => item.id!==dict.id);
 
     Modal.confirm({
-      title: '将会删除此辞书内所有单词，请三思！',
+      title: this.dictPage.removeDictWarning,
       onOk() {
         if (dict.id === current.id) {
           setCurrent({
@@ -118,13 +118,13 @@ class Dict extends PureComponent {
           dicts: newDicts,
           dictId: dict.id,
           onSuccess: () => {
-            message.success("辞书删除成功！");
+            message.success(that.dictPage.removeDictSuccessInfo);
             that.getDicts();
           },
         });
       },
-      okText: '删除',
-      cancelText: '取消',
+      okText: this.dictPage.removeDictModalOK,
+      cancelText: this.dictPage.modalCancel,
     });
   };
 
@@ -134,7 +134,7 @@ class Dict extends PureComponent {
     add({
       dicts,
       onSuccess: () => {
-        message.success("辞书添加成功！");
+        message.success(this.dictPage.addDictSuccessInfo);
         this.setState({ modalVisible: false });
         this.getDicts();
 
@@ -142,7 +142,7 @@ class Dict extends PureComponent {
           setCurrent({
             dict,
             onSuccess: () => {
-              message.success("设置在背辞书成功！");
+              message.success(this.dictPage.setCurrentSuccessInfo);
               this.getCurrentDict();
             },
           });
@@ -164,7 +164,7 @@ class Dict extends PureComponent {
     rename({
       dicts: temp,
       onSuccess: () => {
-        message.success("辞书改名成功！");
+        message.success(this.dictPage.renameDictSuccessInfo);
         this.setState({ modalVisible: false });
         this.getDicts();
 
@@ -213,7 +213,7 @@ class Dict extends PureComponent {
           break;
 
           default:
-            console.err("【/Dict/index.js】一定是代码出错了！要不不可能到这个switch分支里来！");
+            console.error("【/Dict/index.js】一定是代码出错了！要不不可能到这个switch分支里来！");
         }
 
         this.setState({ modalType: null, editingDict: null });
@@ -253,10 +253,10 @@ class Dict extends PureComponent {
             onSuccess: () => {},
           });
         } else {
-          message.error("辞书格式不正确，导入失败！");
+          message.error(this.dictPage.wrongDictFormatWarning);
         }
       } catch (e) {
-        message.error("辞书格式不正确，导入失败！");
+        message.error(this.dictPage.wrongDictFormatWarning);
       }
     });
     reader.readAsText(file);
@@ -281,7 +281,7 @@ class Dict extends PureComponent {
             ghost
             onClick={this.handleAdd}
           >
-            新建辞书
+            { this.dictPage.createDict }
         </Button>
           <Upload
             showUploadList={false}
@@ -293,7 +293,7 @@ class Dict extends PureComponent {
               className="upBtn"
               ghost
             >
-              导入辞书
+              { this.dictPage.importDict }
           </Button>
           </Upload>
         </Group>
@@ -310,24 +310,24 @@ class Dict extends PureComponent {
                         this.handleSetCurrent(item);
                       }}
                     >
-                      背它
+                      { this.dictPage.setCurrentDict }
                     </List.Item>
                     <List.Item
                       onClick={ () => {
                         this.handleRename(item);
                       }}
                     >
-                      重命名
+                      { this.dictPage.renameDict }
                     </List.Item>
                     <List.Item
                       onClick={ () => this.handleSave(item) }
                     >
-                      导出
+                      { this.dictPage.exportDict }
                     </List.Item>
                     <List.Item
                       onClick={ () => this.handleRemove(item) }
                     >
-                      删除
+                      { this.dictPage.removeDict }
                     </List.Item>
                   </List>
                 }
@@ -340,7 +340,7 @@ class Dict extends PureComponent {
                   { item.name }
                   <span>{ item.length }</span>
                   { (current && item.id===current.id) && (
-                    <span className="current">正在背</span>
+                    <span className="current">{ this.dictPage.currentDict }</span>
                   ) }
                 </Card>
               </Popover>
@@ -349,27 +349,27 @@ class Dict extends PureComponent {
         </Row>
 
         <Modal
-          title="新建辞书"
+          title={ this.dictPage.createDictModalTitle }
           visible={ modalVisible }
           onOk={ this.handleModalOkClick }
-          onCancel={ () => { 
+          onCancel={ () => {
             this.setState({ modalVisible: false });
             this.getDicts();
             form.resetFields();
           }}
-          okText="确定"
-          cancelText="取消"
+          okText={ this.dictPage.createDictModalOk }
+          cancelText={ this.dictPage.modalCancel }
         >
           <Form onSubmit={ this.handleModalOkClick }>
             <Item>{getFieldDecorator('name', {
                 rules: [{
                   required: true,
-                  message: '名称不能为空!',
+                  message: this.dictPage.nameWarning,
                 }],
               })(
                 <Input
                   size="large"
-                  placeholder="名称"
+                  placeholder={ this.dictPage.namePlaceholder }
                 />
               )}
             </Item>

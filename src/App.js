@@ -34,9 +34,10 @@ export default class App extends PureComponent {
       img: null,
     },
     localeName: '',
-    locale: locales[1],
+    locale: locales[0],
     modalVisible: false,
     languageItems: null,
+    index: 0,
   };
 
   componentWillMount() {
@@ -48,24 +49,37 @@ export default class App extends PureComponent {
 
     this.setState({ page: pathname.slice(1) });
     // 让page随url变化
-
-    const { localeName } = this.state;
-    if (localeName === '') {
-      console.log(locales);
-    }
   }
 
   getSettings = () => {
     getSetting(setting => {
       this.setState({ localeName: setting.locale });
+
+      if (setting.locale === '') {
+        this.setState({ modalVisible: true });
+      }
     });
   };
 
   handleRadioChange = e => {
     this.setState({
       locale: locales[e.target.value],
+      index: e.target.value,
     });
-  }
+  };
+
+  handleChangeLanguage = () => {
+    const { locale } = this.state;
+
+    setSetting({
+      setting: {
+        locale: locale.key,
+      },
+      onSuccess: () => {
+        this.setState({ modalVisible: false });
+      },
+    });
+  };
 
   handleMenuClick = (e) => {
     history.push(e.key);
@@ -84,7 +98,7 @@ export default class App extends PureComponent {
   };
 
   render() {
-    const { page , locale, modalVisible } = this.state;
+    const { page , locale, modalVisible, index } = this.state;
     const { appPage } = locale;
 
     return (
@@ -103,23 +117,27 @@ export default class App extends PureComponent {
             >
               <Item
                 key="add"
+                className="tabItem"
               >
-                <Icon type="plus-square" /> { appPage.add }
+                <Icon type="plus-square" />{ appPage.add }
               </Item>
               <Item
                 key="memorize"
+                className="tabItem"
               >
-                <Icon type="thunderbolt" /> { appPage.memorize }
+                <Icon type="thunderbolt" />{ appPage.memorize }
               </Item>
               <Item
                 key="dict"
+                className="tabItem"
               >
-                <Icon type="book" /> { appPage.dict }
+                <Icon type="book" />{ appPage.dict }
               </Item>
               <Item
                 key="setting"
+                className="tabItem"
               >
-                <Icon type="setting" /> { appPage.setting }
+                <Icon type="setting" />{ appPage.setting }
               </Item>
             </Menu>
           </Affix>
@@ -134,11 +152,12 @@ export default class App extends PureComponent {
           >
             <RadioGroup
               onChange={ this.handleRadioChange }
+              value={ index }
             >
-              { locales.slice(1).map((item, index) => (
+              { locales.map((item, index) => (
                 <Radio
                   key={ item.key }
-                  value={ index+1 }
+                  value={ index }
                 >
                   { item.name }
                 </Radio>
@@ -183,7 +202,20 @@ export default class App extends PureComponent {
               />
             )}
           />
-          <Route path="/setting" component={ Setting } />
+          <Route
+            path="/setting"
+            render={ props => (
+              <Setting
+                locale={ locale }
+                onRadioChange={ this.handleRadioChange }
+                onChangeLanguage={ this.handleChangeLanguage }
+                onLanguageClick={ () => this.setState({ modalVisible: true }) }
+                visible={ modalVisible }
+                index={ index }
+                { ...props }
+              />
+            )}
+          />
           <Route path="/donate" component={Donate } />
         </div>
       </Router>

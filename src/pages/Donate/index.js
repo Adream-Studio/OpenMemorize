@@ -15,7 +15,7 @@ class Donate extends PureComponent {
         md={{ span: 12, offset: 6 }}
       >
         <Card
-          title="支付宝"
+          title="支付宝 Alipay"
           className="card"
         >
           <img
@@ -25,7 +25,7 @@ class Donate extends PureComponent {
           />
         </Card>
         <Card
-          title="微信"
+          title="微信 WeChat"
           className="card"
         >
           <img

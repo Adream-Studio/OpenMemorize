@@ -36,3 +36,7 @@
 .ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
   border-bottom: none;
 }
+
+.tabItem {
+  padding: 0 10px;
+}

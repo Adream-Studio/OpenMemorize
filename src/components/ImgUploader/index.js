@@ -32,6 +32,7 @@ class ImgUploader extends PureComponent {
               showUploadList={ false }
               onChange={ onImgChange }
               beforeUpload={ () => false }
+              id="uploader"
             >
               { img ? (
                 <img width="100%" src={ img } alt="avatar" />

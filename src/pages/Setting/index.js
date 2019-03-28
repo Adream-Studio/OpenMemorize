@@ -5,11 +5,15 @@ import {
   Row,
   Icon,
   Typography,
+  Radio,
+  Modal,
 } from 'antd';
 import './index.css';
 import logo from '../../logo.png';
+import locales from "../../locale/config";
 
 const { Paragraph } = Typography;
+const RadioGroup = Radio.Group;
 
 class Setting extends PureComponent {
   handleIssue = () => {
@@ -27,18 +31,31 @@ class Setting extends PureComponent {
   };
 
   render() {
+    const {
+      locale,
+      onChangeLanguage,
+      onRadioChange,
+      onLanguageClick,
+      modalVisible,
+      index,
+    } = this.props;
+    const { settingPage, appPage } = locale;
+
     return (
       <Col
         xs={{ span:22, offset:1 }}
         md={{ span: 12, offset: 6 }}
       >
-        <Row gutter={ 1 }>
-          <Col span={ 24 }>
+        <Row gutter={ 4 }>
+          <Col
+            span={ 24 }
+            style={{ marginBottom: '10px' }}
+          >
             <Card
               bordered={ false }
             >
               <Col span={ 18 }>
-                <Paragraph>Open Memorize - v1.2.5</Paragraph>
+                <Paragraph>Open Memorize - v1.3</Paragraph>
                 <a
                   href="https://gitee.com/joenahm/codeMemo/blob/master/resume.md"
                   target="_blank"
@@ -46,13 +63,12 @@ class Setting extends PureComponent {
                   Joe Nahm
                 </a>
                 <Paragraph>
-                  基于
                   <a
                     href="https://gitee.com/AdreamStudio/OpenMemorize/raw/master/LICENSE"
                     target="_blank"
                   >
-                    GPLv3许可证
-                  </a> 开源
+                    { settingPage.license }
+                  </a>
                 </Paragraph>
               </Col>
               <Col span={ 6 }>
@@ -64,10 +80,10 @@ class Setting extends PureComponent {
             <Card
               bordered={ false }
               className="card"
-              onClick={ this.handleIssue }
+              onClick={ onLanguageClick }
             >
-              <Icon type="question-circle" />
-              <span className="text">问题反馈</span>
+              <Icon type="global" />
+              <span className="text">{ settingPage.language }</span>
             </Card>
           </Col>
           <Col span={ 8 }>
@@ -77,7 +93,7 @@ class Setting extends PureComponent {
               onClick={ this.handleSourceCode }
             >
               <Icon type="code" />
-              <span className="text">源代码</span>
+              <span className="text">{ settingPage.sourceCode }</span>
             </Card>
           </Col>
           <Col span={ 8 }>
@@ -87,10 +103,43 @@ class Setting extends PureComponent {
               onClick={ this.handleDonate }
             >
               <Icon type="like" />
-              <span className="text">打赏作者</span>
+              <span className="text">{ settingPage.donate }</span>
             </Card>
-          </Col> 
+          </Col>
+          <Col span={ 8 }>
+            <Card
+              bordered={ false }
+              className="card"
+              onClick={ this.handleIssue }
+            >
+              <Icon type="question-circle" />
+              <span className="text">{ settingPage.feedback }</span>
+            </Card>
+          </Col>
         </Row>
+
+        <Modal
+          title={ appPage.languageModalTitle }
+          visible={ modalVisible }
+          onOk={ onChangeLanguage }
+          onCancel={ () => this.setState({ localeName: '', modalVisible: false }) }
+          okText={ appPage.languageModalOk }
+          cancelText={ appPage.languageModalCancel }
+        >
+          <RadioGroup
+            onChange={ onRadioChange }
+            value={ index }
+          >
+            { locales.map((item, index) => (
+              <Radio
+                key={ item.key }
+                value={ index }
+              >
+                { item.name }
+              </Radio>
+            )) }
+          </RadioGroup>
+        </Modal>
       </Col>
     );
   }
