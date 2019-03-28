@@ -42,6 +42,9 @@ class Dict extends PureComponent {
   componentWillMount() {
     this.getDicts();
     this.getCurrentDict();
+
+    const { locale } = this.props;
+    this.dictPage = locale.dictPage;
   };
 
   getDicts = () => {

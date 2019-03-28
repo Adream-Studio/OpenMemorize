@@ -68,9 +68,11 @@ class Memorize extends PureComponent {
   handleRemove = (text) => {
     const that = this;
     const { words, current } = this.state;
+    const { locale } = this.props;
+    const { memorizePage } = locale;
 
     Modal.confirm({
-      title: '真的要删除这个单词吗？',
+      title: memorizePage.deleteModalTitle,
       onOk() {
         const tmp = words.filter(item => item.text!==text);
 
@@ -82,8 +84,8 @@ class Memorize extends PureComponent {
           },
         })
       },
-      okText: '是的',
-      cancelText: '点错了',
+      okText: memorizePage.deleteModalOk,
+      cancelText: memorizePage.deleteModalCancel,
     });
   };
 
@@ -150,6 +152,8 @@ class Memorize extends PureComponent {
   };
 
   render() {
+    const { locale } = this.props;
+    const { memorizePage } = locale;
     const { index, words, current, uploaderShow, img } = this.state;
 
     return (
@@ -216,7 +220,7 @@ class Memorize extends PureComponent {
                 <img
                   className="img"
                   src={ words[index].media.content }
-                  alt="释义图片"
+                  alt="释义图片(interpretationImg)"
                 />
               ) }
               { uploaderShow && (
@@ -226,6 +230,7 @@ class Memorize extends PureComponent {
                     onImgChange={ this.handleImgChange }
                     onImgPaste={ this.handleImgPaste }
                     img={ img }
+                    locale={ locale }
                   />
                   <Row gutter={ 8 }>
                     <Col span={ 12 }>
@@ -234,7 +239,7 @@ class Memorize extends PureComponent {
                         block
                         onClick={ () => this.handleAddImg(index) }
                       >
-                        添加
+                        { memorizePage.uploadAdd }
                       </Button>
                     </Col>
                     <Col span={ 12 }>
@@ -242,7 +247,7 @@ class Memorize extends PureComponent {
                         block
                         onClick={ this.handleCancelAddImg }
                       >
-                        取消
+                        { memorizePage.uploadCancel }
                       </Button>
                     </Col>
                   </Row>
@@ -252,7 +257,7 @@ class Memorize extends PureComponent {
           </Fragment>
         ) : (
           <Empty
-            description="还没有单词，请先创建辞书再添加单词"
+            description={ memorizePage.emptyTip }
           />
         ) }
       </Col>

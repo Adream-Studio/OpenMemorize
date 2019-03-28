@@ -52,6 +52,9 @@ class Add extends PureComponent {
     getCurrent(current => {
       this.setState({ current });
     });
+
+    const { locale } = this.props;
+    this.addPage = locale.addPage;
   }
 
   componentDidMount() {
@@ -96,7 +99,7 @@ class Add extends PureComponent {
               initialValue: item.value,
               rules: [{
                 required: true,
-                message: '释义不能为空!',
+                message: this.addPage.interpreWarning,
               }],
             })(
               <TextArea
@@ -106,7 +109,7 @@ class Add extends PureComponent {
                   maxRows: 4,
                 }}
                 size="large"
-                placeholder="释义"
+                placeholder={ this.addPage.interprePlaceholder }
               />
             )}
             </Col>
@@ -184,7 +187,7 @@ class Add extends PureComponent {
             dictId: dict,
             words,
             onSuccess: () => {
-              message.success("添加成功！");
+              message.success(this.addPage.successInfo);
               that.clearForm();
             },
           });
@@ -280,17 +283,17 @@ class Add extends PureComponent {
     const that = this;
 
     Modal.confirm({
-      title: '将会清空本次添加，是否继续？',
+      title: this.addPage.clearWarning,
       onOk() {
         that.clearForm();
       },
-      okText: '是',
-      cancelText: '否',
+      okText: this.addPage.clearOk,
+      cancelText: this.addPage.clearCancel,
     });
   };
 
   render() {
-    const { onRetrieve } = this.props;
+    const { onRetrieve, locale } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { img, dicts, current } = this.state;
 
@@ -313,11 +316,11 @@ class Add extends PureComponent {
               {getFieldDecorator('dict', {
                 rules: [{
                   required: true,
-                  message: '请选择辞书，若没有请先去创建',
+                  message: this.addPage.dictWarning,
                 }],
                 initialValue: current ? current.id : '',
               })(
-                <Select size="large" placeholder="选择辞书">
+                <Select size="large" placeholder={ this.addPage.dictPlaceholder }>
                   { dicts.map(item => (
                     <Option
                       key={ item.id }
@@ -332,12 +335,12 @@ class Add extends PureComponent {
             <Item>{getFieldDecorator('text', {
                 rules: [{
                   required: true,
-                  message: '单词不能为空!',
+                  message: this.addPage.textWarning,
                 }],
               })(
                 <Input
                   size="large"
-                  placeholder="单词"
+                  placeholder={ this.addPage.textPlaceholder }
                 />
               )}
             </Item>
@@ -346,7 +349,7 @@ class Add extends PureComponent {
             })(
                 <Input
                   size="large"
-                  placeholder="假名/音标"
+                  placeholder={ this.addPage.kanaPlaceholder }
                 />
               )}
             </Item>
@@ -364,6 +367,7 @@ class Add extends PureComponent {
                 img={ img }
                 onImgChange={ this.handleImgChange }
                 onImgPaste={ this.handleImgPaste }
+                locale={ locale }
               />
             </Item>
           </Form>
@@ -374,7 +378,7 @@ class Add extends PureComponent {
             type="primary"
             onClick={ this.handleSubmit }
           >
-            添加
+            { this.addPage.add }
           </Button>
           <Button
             size="large"
@@ -382,7 +386,7 @@ class Add extends PureComponent {
             block
             onClick={ this.handleCancel }
           >
-            取消
+            { this.addPage.cancel }
           </Button>
         </Card>
       </Col>

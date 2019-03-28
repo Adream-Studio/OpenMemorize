@@ -12,7 +12,14 @@ const { TextArea } = Input;
 
 class ImgUploader extends PureComponent {
   render() {
-    const { img, onImgChange, onImgPaste, ...rest } = this.props;
+    const {
+      img,
+      onImgChange,
+      onImgPaste,
+      locale,
+      ...rest
+    } = this.props;
+    const { imgUploader } = locale;
 
     return (
       <div { ...rest }>
@@ -31,7 +38,7 @@ class ImgUploader extends PureComponent {
               ) : (
                 <div>
                   <Icon type="plus" />
-                  <div className="ant-upload-text">添加图片（可拖拽）</div>
+                  <div className="ant-upload-text">{ imgUploader.uploaderTip } </div>
                 </div>
               ) }
             </Dragger>
@@ -42,7 +49,7 @@ class ImgUploader extends PureComponent {
                 display: 'block',
                 height: 85.33,
               }}
-              placeholder="在此处可直接粘贴图片(仅电脑)"
+              placeholder={ imgUploader.pasteAreaTip }
               onPaste={ onImgPaste }
             />
           </Col>

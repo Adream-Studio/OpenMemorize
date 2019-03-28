@@ -29,6 +29,14 @@ export async function getCurrentDict() {
     return localForage.getItem('current');
 }
 
+export async function getSetting() {
+    return localForage.getItem('setting');
+}
+
+export async function setSetting(setting) {
+    return localForage.setItem('setting', setting);
+}
+
 export function save({ name, content }) {
     const blob = new Blob([content], {type: "text/json;charset=utf-8"});
     return saveAs(blob, name);
