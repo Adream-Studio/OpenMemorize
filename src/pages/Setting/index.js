@@ -33,14 +33,14 @@ class Setting extends PureComponent {
   render() {
     const {
       locale,
+      localeName,
       onChangeLanguage,
       onRadioChange,
       onLanguageClick,
       modalVisible,
-      index,
     } = this.props;
     const { settingPage, appPage } = locale;
-
+    
     return (
       <Col
         xs={{ span:22, offset:1 }}
@@ -128,12 +128,12 @@ class Setting extends PureComponent {
         >
           <RadioGroup
             onChange={ onRadioChange }
-            value={ index }
+            value={ localeName }
           >
-            { locales.map((item, index) => (
+            { locales.map(item => (
               <Radio
                 key={ item.key }
-                value={ index }
+                value={ item.key }
               >
                 { item.name }
               </Radio>
