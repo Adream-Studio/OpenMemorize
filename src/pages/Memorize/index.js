@@ -212,7 +212,7 @@ class Memorize extends PureComponent {
                 size="small"
                 ghost
               >
-                重来
+                { memorizePage.reset }
               </Button>
             </div>
           </div>

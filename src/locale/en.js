@@ -32,6 +32,7 @@ export default {
     deleteModalOk: 'Yes',
     deleteModalCancel: 'No',
     emptyTip: 'No word there, create a dictionary and add some !~',
+    reset: 'Reset',
   },
   dictPage: {
     modalCancel: 'Cancel',
