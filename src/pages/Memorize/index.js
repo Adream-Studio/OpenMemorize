@@ -12,6 +12,7 @@ import {
   Empty,
   Badge,
   Modal,
+  Progress,
 } from 'antd';
 import { query, remove, update } from '../../models/word';
 import { getCurrent as getCurrentDict } from '../../models/dict';
@@ -29,6 +30,7 @@ class Memorize extends PureComponent {
     current: null,
     uploaderShow: false,
     img: null,
+    memorized: [],
   };
 
   componentWillMount() {
@@ -61,7 +63,22 @@ class Memorize extends PureComponent {
     this.setState({ index: randomIndex });
   };
 
-  handleNext = () => {
+  getRealLength = (arr) => {
+    // 因为给下标赋值会造成此下边之前的值全是empty，所以要求真实的长度
+    let count = 0;
+    for (let _ in arr) {
+      count += 1;
+    }
+
+    return count;
+  };
+
+  handleMemorize = (index) => {
+    const { memorized } = this.state;
+
+    memorized[index] = true;
+    this.setState({ memorized });
+
     this.genNextIndex();
   };
 
@@ -151,10 +168,23 @@ class Memorize extends PureComponent {
     });
   };
 
+  handleClear = () => {
+    this.setState({
+      memorized: [],
+    });
+  };
+
   render() {
     const { locale } = this.props;
     const { memorizePage } = locale;
-    const { index, words, current, uploaderShow, img } = this.state;
+    const {
+      index,
+      words,
+      current,
+      uploaderShow,
+      img,
+      memorized,
+    } = this.state;
 
     return (
       <Col
@@ -162,11 +192,30 @@ class Memorize extends PureComponent {
         md={{ span: 12, offset: 6 }}
       >
         { current!==null && current.name && (
-          <Badge
-            status="processing"
-            text={ `${current.name} (${words.length})` }
-            className="current"
-          />
+          <div className="topWrapper">
+            <Badge
+              status="processing"
+              text={ `${current.name} (${words.length})` }
+              className="current"
+            />
+            <div className="progressWrapper">
+              <Progress
+                className="progress"
+                status="active"
+                default="small"
+                percent={ parseFloat((this.getRealLength(memorized)/words.length*100).toFixed(1)) }
+                size="small"
+              />
+              <Button
+                onClick={ this.handleClear }
+                type="primary"
+                size="small"
+                ghost
+              >
+                重来
+              </Button>
+            </div>
+          </div>
         ) }
         { words.length > 0 && words[index] ? (
           <Fragment>
@@ -176,7 +225,7 @@ class Memorize extends PureComponent {
               type="primary"
               className="btn"
               htmlType="button"
-              onClick={ this.handleNext }
+              onClick={ () => this.handleMemorize(index) }
             >
               <Icon type="thunderbolt" theme="filled" />
             </Button>

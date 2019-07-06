@@ -1,3 +1,8 @@
+.topWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
 .img {
 	width: fit-content;
 	max-width: 100%;
@@ -5,11 +10,22 @@
 }
 
 .current {
+	display: inline-block !important;
 	padding-bottom: 10px;
 }
 
 .current .ant-badge-status-text {
 	color: #999;
+}
+
+.progressWrapper {
+    width: 210px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.progress {
+    width: 150px;
 }
 
 .uploader {

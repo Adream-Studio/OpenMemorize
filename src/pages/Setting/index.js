@@ -40,7 +40,7 @@ class Setting extends PureComponent {
       modalVisible,
     } = this.props;
     const { settingPage, appPage } = locale;
-    
+
     return (
       <Col
         xs={{ span:22, offset:1 }}
@@ -55,7 +55,7 @@ class Setting extends PureComponent {
               bordered={ false }
             >
               <Col span={ 18 }>
-                <Paragraph>Open Memorize - v1.3</Paragraph>
+                <Paragraph>Open Memorize - v1.4</Paragraph>
                 <a
                   href="https://gitee.com/joenahm/codeMemo/blob/master/resume.md"
                   target="_blank"

@@ -104,11 +104,11 @@ export default class App extends PureComponent {
 
   render() {
     const { page , locale, modalVisible, localeName } = this.state;
-    let appPage
+    let appPage;
     if (locale !== null) {
       appPage = locale.appPage;
     }
-    
+
     return (
       <Router history={ history }>
         { locale && appPage && (
