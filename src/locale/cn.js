@@ -32,7 +32,7 @@ export default {
     deleteModalOk: '是的',
     deleteModalCancel: '点错了',
     emptyTip: '还没有单词，请先创建辞书再添加单词',
-    reset: '重来',
+    reset: '下一组',
   },
   dictPage: {
     modalCancel: '取消',

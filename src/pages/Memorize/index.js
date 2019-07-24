@@ -23,6 +23,10 @@ import './index.css';
 const { Item } = List;
 const { Group } = Button;
 
+// @TODO 暂时先设置一个组长
+
+const GRPLEN = 50;
+
 class Memorize extends PureComponent {
   state = {
     index: 0,
@@ -31,6 +35,7 @@ class Memorize extends PureComponent {
     uploaderShow: false,
     img: null,
     memorized: [],
+    group: [],
   };
 
   componentWillMount() {
@@ -43,7 +48,7 @@ class Memorize extends PureComponent {
         query(current.id, words => {
           this.setState({ words });
 
-          this.genNextIndex(words.length);
+          this.genGroup(GRPLEN, words,);
         });
       }
 
@@ -51,16 +56,38 @@ class Memorize extends PureComponent {
     });
   };
 
+  genGroup = (length, words) => {
+    let groupLen;
+    if (length > words.length) {
+      groupLen = words.length;
+    } else {
+      groupLen = length;
+    }
+
+    const tmp = [];
+    words.forEach(word => tmp.push(word));
+
+    const group = [];
+    while (groupLen > 0) {
+      group.push(tmp.splice(this.genNextIndex(tmp.length), 1)[0]);
+      groupLen -= 1;
+    }
+
+    this.setState({ group });
+    this.genNextIndex();
+  };
+
   genNextIndex = (length=null) => {
     if (length === null) {
-      const { words } = this.state;
+      const { group } = this.state;
 
-      length = words.length;
+      length = group.length;
     }
 
     const randomIndex = parseInt(Math.random()*length, 10);
 
     this.setState({ index: randomIndex });
+    return randomIndex;
   };
 
   getRealLength = (arr) => {
@@ -169,9 +196,14 @@ class Memorize extends PureComponent {
   };
 
   handleClear = () => {
+    const { words } = this.state;
+
     this.setState({
       memorized: [],
+      group: [],
     });
+
+    this.genGroup(GRPLEN, words);
   };
 
   render() {
@@ -184,6 +216,7 @@ class Memorize extends PureComponent {
       uploaderShow,
       img,
       memorized,
+      group,
     } = this.state;
 
     return (
@@ -203,7 +236,9 @@ class Memorize extends PureComponent {
                 className="progress"
                 status="active"
                 default="small"
-                percent={ parseFloat((this.getRealLength(memorized)/words.length*100).toFixed(1)) }
+                percent={
+                  parseFloat((this.getRealLength(memorized)/group.length*100).toFixed(1))
+                }
                 size="small"
               />
               <Button
@@ -217,7 +252,7 @@ class Memorize extends PureComponent {
             </div>
           </div>
         ) }
-        { words.length > 0 && words[index] ? (
+        { group.length > 0 && group[index] ? (
           <Fragment>
             <Button
               size="large"
@@ -234,8 +269,8 @@ class Memorize extends PureComponent {
             >
               <Row>
                 <Col span={ 16 }>
-                  <h2>{ words[index].text }</h2>
-                  <h3>{ words[index].kana }</h3>
+                  <h2>{ group[index].text }</h2>
+                  <h3>{ group[index].kana }</h3>
                 </Col>
                 <Col span={ 8 } className="btnRightWrapper">
                   <Group>
@@ -247,7 +282,7 @@ class Memorize extends PureComponent {
                       </Button>
                     <Button
                       htmlType="button"
-                      onClick={ () => this.handleRemove(words[index].text) }
+                      onClick={ () => this.handleRemove(group[index].text) }
                     >
                       <Icon type="delete" />
                     </Button>
@@ -256,7 +291,7 @@ class Memorize extends PureComponent {
               </Row>
               <List
                 bordered
-                dataSource={ words[index].interpres }
+                dataSource={ group[index].interpres }
                 renderItem={item => (
                   <Item
                     key={ item.id }
@@ -265,10 +300,10 @@ class Memorize extends PureComponent {
                   </Item>
                 )}
               />
-              { (words[index].media.type==='img' && words[index].media.content) && (
+              { (group[index].media.type==='img' && group[index].media.content) && (
                 <img
                   className="img"
-                  src={ words[index].media.content }
+                  src={ group[index].media.content }
                   alt="释义图片(interpretationImg)"
                 />
               ) }
