@@ -70,6 +70,18 @@ class Memorize extends PureComponent {
           const list = countList.data;
           const group = [];
 
+          // 对list进行随机化，防止背单词时枯燥
+          let randomEnd = list.length;
+          while (randomEnd > 0) {
+            const index = parseInt(Math.random()*randomEnd, 10);
+
+            const temp = list[randomEnd-1];
+            list[randomEnd-1] = list[index];
+            list[index] = temp;
+
+            randomEnd -= 1;
+          }
+
           for (let i = 0; i < GRPLEN; i++) {
             let min = list[0];
             let index = 0;
