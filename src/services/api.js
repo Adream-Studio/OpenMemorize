@@ -37,6 +37,14 @@ export async function setSetting(setting) {
     return localForage.setItem('setting', setting);
 }
 
+export async function getCountList() {
+    return localForage.getItem('countList');
+}
+
+export async function setCountList(list) {
+    return localForage.setItem('countList', list);
+}
+
 export function save({ name, content }) {
     const blob = new Blob([content], {type: "text/json;charset=utf-8"});
     return saveAs(blob, name);

@@ -16,6 +16,10 @@ import {
 } from 'antd';
 import { query, remove, update } from '../../models/word';
 import { getCurrent as getCurrentDict } from '../../models/dict';
+import {
+  query as queryCountList,
+  update as updateCountList,
+} from "../../models/count";
 import ImgUploader from '../../components/ImgUploader';
 import { getBase64 } from '../../utils/utils';
 import './index.css';
@@ -47,8 +51,7 @@ class Memorize extends PureComponent {
       if (current !== null) {
         query(current.id, words => {
           this.setState({ words });
-
-          this.genGroup(GRPLEN, words,);
+          this.genGroup(words);
         });
       }
 
@@ -56,25 +59,36 @@ class Memorize extends PureComponent {
     });
   };
 
-  genGroup = (length, words) => {
-    let groupLen;
-    if (length > words.length) {
-      groupLen = words.length;
-    } else {
-      groupLen = length;
+  genGroup = (words=null) => {
+    if (words === null) {
+      words = this.state.words;
     }
 
-    const tmp = [];
-    words.forEach(word => tmp.push(word));
+    getCurrentDict(current => {
+      if (current !== null) {
+        queryCountList(current.id, countList => {
+          const list = countList.data;
+          const group = [];
 
-    const group = [];
-    while (groupLen > 0) {
-      group.push(tmp.splice(this.genNextIndex(tmp.length), 1)[0]);
-      groupLen -= 1;
-    }
+          for (let i = 0; i < GRPLEN; i++) {
+            let min = list[0];
+            let index = 0;
 
-    this.setState({ group });
-    this.genNextIndex();
+            for (let j = 1; j < list.length; j++) {
+              if (min.count > list[j].count) {
+                min = list[j];
+                index = j;
+              }
+            }
+            group.push(words[min.id]);
+            list.splice(index, 1);
+          }
+
+          this.setState({ group });
+          this.genNextIndex(group.length);
+        });
+      }
+    });
   };
 
   genNextIndex = (length=null) => {
@@ -101,10 +115,28 @@ class Memorize extends PureComponent {
   };
 
   handleMemorize = (index) => {
-    const { memorized } = this.state;
+    const { memorized, current } = this.state;
 
     memorized[index] = true;
     this.setState({ memorized });
+
+    queryCountList(current.id, countList => {
+      const newData = countList.data.map(item => {
+        if (item.id === index) {
+          return {
+            id: item.id,
+            count: item.count + 1,
+          }
+        } else {
+          return item;
+        }
+      });
+
+      updateCountList({
+        dictId: current.id,
+        data: newData,
+      });
+    });
 
     this.genNextIndex();
   };
@@ -196,14 +228,12 @@ class Memorize extends PureComponent {
   };
 
   handleClear = () => {
-    const { words } = this.state;
-
     this.setState({
       memorized: [],
       group: [],
     });
 
-    this.genGroup(GRPLEN, words);
+    this.genGroup();
   };
 
   render() {
