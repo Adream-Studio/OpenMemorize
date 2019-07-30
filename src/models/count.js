@@ -6,9 +6,9 @@ const genCountListItem = (dictId, callback) => {
   queryWords(dictId, words => {
     const data = [];
 
-    words.forEach((_, index) => {
+    words.forEach((word) => {
       data.push({
-        id: index,
+        word: word.text,
         count: 0,
       });
     });

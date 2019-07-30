@@ -92,7 +92,7 @@ class Memorize extends PureComponent {
                 index = j;
               }
             }
-            group.push(words[min.id]);
+            group.push(words.find(item=> item.text===min.word));
             list.splice(index, 1);
           }
 
@@ -126,17 +126,17 @@ class Memorize extends PureComponent {
     return count;
   };
 
-  handleMemorize = (index) => {
+  handleMemorize = (text) => {
     const { memorized, current } = this.state;
 
-    memorized[index] = true;
+    memorized[text] = true;
     this.setState({ memorized });
 
     queryCountList(current.id, countList => {
       const newData = countList.data.map(item => {
-        if (item.id === index) {
+        if (item.word === text) {
           return {
-            id: item.id,
+            word: text,
             count: item.count + 1,
           }
         } else {
@@ -162,7 +162,7 @@ class Memorize extends PureComponent {
     Modal.confirm({
       title: memorizePage.deleteModalTitle,
       onOk() {
-        const tmp = words.filter(item => item.text!==text);
+        const tmp = words.filter((word) => word.text!==text);
 
         remove({
           dictId: current.id,
@@ -170,7 +170,14 @@ class Memorize extends PureComponent {
           onSuccess: () => {
             that.getWords();
           },
-        })
+        });
+
+        queryCountList(current.id, countList => {
+          updateCountList({
+            dictId: current.id,
+            data: countList.data.filter(item => item.word!==text),
+          });
+        });    
       },
       okText: memorizePage.deleteModalOk,
       cancelText: memorizePage.deleteModalCancel,
@@ -302,7 +309,7 @@ class Memorize extends PureComponent {
               type="primary"
               className="btn"
               htmlType="button"
-              onClick={ () => this.handleMemorize(index) }
+              onClick={ () => this.handleMemorize(group[index].text) }
             >
               <Icon type="thunderbolt" theme="filled" />
             </Button>
