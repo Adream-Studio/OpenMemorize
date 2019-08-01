@@ -36,16 +36,38 @@ export function query(dictId, onSuccess) {
           });
         });
       });
-    } else if (!data.find(item => item.dictId===dictId)) {
-      genCountListItem(dictId, listItem => {
-        data.push(listItem);
-
-        setCountList(data).catch(err => console.log(err));
-
-        onSuccess(listItem);
-      });
     } else {
-      onSuccess(data.find(item => item.dictId===dictId));
+      const dictCountList = data.find(item => item.dictId===dictId);
+      queryWords(dictId, words => {
+        if (!dictCountList || dictCountList.data.length !== words.length) {
+          genCountListItem(dictId, listItem => {
+            const existListItem = data.find(item => item.dictId === listItem.dictId);
+
+            if (existListItem) {
+              existListItem.data.push({
+                word: words.slice(-1)[0].text,
+                count: 0,
+              });
+
+              data = data.map(item => {
+                if (item.dictId === existListItem.dictId) {
+                  return existListItem;
+                } else {
+                  return item;
+                }
+              });
+            } else {
+              data.push(listItem);
+            }
+    
+            setCountList(data).catch(err => console.log(err));
+    
+            onSuccess(listItem);
+          });
+        } else {
+          onSuccess(dictCountList);
+        }
+      });
     }
   }).catch(err => {
     console.log(err);

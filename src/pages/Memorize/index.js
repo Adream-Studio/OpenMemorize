@@ -82,7 +82,8 @@ class Memorize extends PureComponent {
             randomEnd -= 1;
           }
 
-          for (let i = 0; i < GRPLEN; i++) {
+          const len = GRPLEN < list.length ? GRPLEN : list.length;
+          for (let i = 0; i < len; i++) {
             let min = list[0];
             let index = 0;
 
@@ -92,6 +93,7 @@ class Memorize extends PureComponent {
                 index = j;
               }
             }
+
             group.push(words.find(item=> item.text===min.word));
             list.splice(index, 1);
           }
