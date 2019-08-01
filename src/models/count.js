@@ -22,7 +22,7 @@ const genCountListItem = (dictId, callback) => {
 
 export function query(dictId, onSuccess) {
   getCountList().then(data => {
-    if (data === null) {
+    if (!data) {
       const countList = [];
 
       queryDicts(dicts => {
@@ -39,7 +39,7 @@ export function query(dictId, onSuccess) {
     } else {
       const dictCountList = data.find(item => item.dictId===dictId);
       queryWords(dictId, words => {
-        if (!dictCountList || dictCountList.data.length !== words.length) {
+        if (!dictCountList || dictCountList.data.length < words.length) {
           genCountListItem(dictId, listItem => {
             const existListItem = data.find(item => item.dictId === listItem.dictId);
 
@@ -72,6 +72,23 @@ export function query(dictId, onSuccess) {
   }).catch(err => {
     console.log(err);
   })
+}
+
+export function remove(dictId, text) {
+  getCountList().then(data => {
+    if (data && data.length > 0) {
+      setCountList(data.map(dictCountList => {
+        if (dictCountList.dictId===dictId) {
+          return {
+            dictId,
+            data: dictCountList.data.filter(item => item.word!==text)
+          };
+        } else {
+          return dictCountList;
+        }
+      })).catch(err => console.log(err));
+    }
+  });
 }
 
 export function update(listItem) {

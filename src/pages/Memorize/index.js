@@ -19,6 +19,7 @@ import { getCurrent as getCurrentDict } from '../../models/dict';
 import {
   query as queryCountList,
   update as updateCountList,
+  remove as removeCountListItem,
 } from "../../models/count";
 import ImgUploader from '../../components/ImgUploader';
 import { getBase64 } from '../../utils/utils';
@@ -174,12 +175,7 @@ class Memorize extends PureComponent {
           },
         });
 
-        queryCountList(current.id, countList => {
-          updateCountList({
-            dictId: current.id,
-            data: countList.data.filter(item => item.word!==text),
-          });
-        });    
+        removeCountListItem(current.id, text);
       },
       okText: memorizePage.deleteModalOk,
       cancelText: memorizePage.deleteModalCancel,
