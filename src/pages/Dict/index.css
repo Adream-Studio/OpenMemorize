@@ -1,0 +1,33 @@
+.dict {
+    height: 240px;
+    text-align: center;
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+.dict .ant-card-body {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.current {
+    display: block;
+    font-size: 16px;
+    font-weight: normal;
+    color: #1890ff;
+}
+
+.btnGroup, .upBtn {
+    width: 100%;
+}
+
+.btnGroup .upBtn {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.btnGroup .btn, .btnGroup .ant-upload {
+    width: 50%;
+}
